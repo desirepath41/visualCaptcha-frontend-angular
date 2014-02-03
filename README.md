@@ -79,6 +79,7 @@ JSON object of the visualCaptcha options can contain next parameters:
     <!-- !FIXME - `path` (default: `''`) — is the url prefix; -->
     <!-- !FIXME - `autoRefresh` (default: `true`) — if it is `true` it will load the data when it's constructed; -->
     - `numberOfImages` (default: `6`) — number of generated images for visualCaptcha;
+    - `namespaceFieldName` — field name for a hidden field for a multiple captchas on a page;
     - `routes` — object with next endpoint routes:
         - `start` (default: `'/start'`) — route to generate common data (image field name, image name, image values and audio field name);
         - `image` (default: `'/image'`) — route to get generated image file by index;
