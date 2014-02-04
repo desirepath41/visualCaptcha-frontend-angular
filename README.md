@@ -28,7 +28,7 @@ bower install visualcaptcha.angular
     <body ng-app="app" ng-controller="captchaController">
         <!-- ... -->
 
-        <captcha options="captchaOptions"></captcha>
+        <div captcha options="captchaOptions"></div>
         
         <!-- ... -->
     </body>
