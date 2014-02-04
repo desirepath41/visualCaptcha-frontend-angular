@@ -79,7 +79,8 @@ JSON object of the visualCaptcha options can contain next parameters:
     <!-- !FIXME - `path` (default: `''`) — is the url prefix; -->
     <!-- !FIXME - `autoRefresh` (default: `true`) — if it is `true` it will load the data when it's constructed; -->
     - `numberOfImages` (default: `6`) — number of generated images for visualCaptcha;
-    - `namespaceFieldName` — field name for a hidden field for a multiple captchas on a page;
+    - `namespaceFieldName` (default: `'namespace'`) — the name of the parameter sent to the server for the namespace;
+    — `namespace` — the value of the parameter sent to the server for the namespace, if it's not setted up, no namespace will be sent;
     - `routes` — object with next endpoint routes:
         - `start` (default: `'/start'`) — route to generate common data (image field name, image name, image values and audio field name);
         - `image` (default: `'/image'`) — route to get generated image file by index;
@@ -107,6 +108,56 @@ All next methods are available from _VisualCaptcha object_ that will be passed i
 - `numberOfImages()` — returns number of generated images;
 - `refresh()` — reloads visual captcha, sends new request to the back-end;
 - `supportsAudio()` — returns `true` if browser supports HTML 5 Audio, else returns `false`;
+
+### Initialization of multiple captchas on a page
+
+There are two fields: `namespace` and `namespaceFieldName` for creating multiple captchas.
+The `namespace` option can be loaded from the `data-namespace` attribute or from the captcha options:
+```html
+<form id='login-form'>
+    <!-- ... -->
+    <div captcha options="loginOptions" id="login-captcha"></div>
+    <!-- ... -->
+</form>
+
+<form id='search-form'>
+    <!-- ... -->
+    <div captcha options="searchOptions" id="search-captcha" data-namespace="search"></div>
+    <!-- ... -->
+</form>
+```
+
+And the `namespaceFieldName` option can be loaded from the captcha options:
+```javascript
+angular
+    .module( 'app', [ 'visualCaptcha' ] )
+    .controller( 'captchaController', function( $scope ) {
+        $scope.loginOptions = {
+            captcha: {
+                namespace: 'login',
+                namespaceFieldName: 'myFieldName'
+            },
+            // use init callback to get captcha object
+            init: function ( captcha ) {
+                $scope.loginCaptcha = captcha;
+            }
+        };
+
+        $scope.searchOptions = {
+            captcha: {
+                namespaceFieldName: 'myFieldName'
+            },
+            // use init callback to get captcha object
+            init: function ( captcha ) {
+                $scope.searchCaptcha = captcha;
+            }
+        };
+    } );
+```
+
+Such configuration will create a hidden field in each form with a captcha
+with the field name of `namespaceFieldName` and the field value of `namespace`
+for initialize multiple captchas.
 
 
 
