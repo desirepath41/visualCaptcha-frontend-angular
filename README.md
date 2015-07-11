@@ -20,7 +20,7 @@ bower install visualcaptcha.angular
 
 ## Sample
 
-[View sample usage in the node demo](https://github.com/emotionLoop/visualCaptcha-node/blob/master/public/js/main.js)
+[View sample usage in the ruby demo](https://github.com/emotionLoop/visualCaptcha-ruby/blob/master/public/js/main.js)
 
 
 ## License
