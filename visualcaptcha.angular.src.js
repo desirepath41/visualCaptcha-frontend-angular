@@ -1,4 +1,4 @@
-/*! visualCaptcha - v0.0.6 - 2015-07-11
+/*! visualCaptcha - v0.0.7 - 2015-07-13
 * http://visualcaptcha.net
 * Copyright (c) 2015 emotionLoop; Licensed MIT */
 
@@ -469,6 +469,8 @@ define( 'visualcaptcha/core',[],function() {
         // URL must be loaded after nonce is applied
         startURL = _startUrl( config );
 
+        config._loading( core );
+
         if ( config.callbacks.loading ) {
             config.callbacks.loading( core );
         }
@@ -496,6 +498,8 @@ define( 'visualcaptcha/core',[],function() {
             // Set loaded state
             config.isLoading = false;
             config.hasLoaded = true;
+
+            config._loaded( core );
 
             if ( config.callbacks.loaded ) {
                 config.callbacks.loaded( core );
@@ -715,7 +719,9 @@ define('visualcaptcha/config',[ 'visualcaptcha/xhr-request' ], function( xhrRequ
             imageName: '',
             imageValues: [],
             /* CALLBACKS */
-            callbacks: {}
+            callbacks: {},
+            _loading: function() {},
+            _loaded: function() {}
         };
 
         // Update and return the random nonce
@@ -761,7 +767,7 @@ define('visualcaptcha/config',[ 'visualcaptcha/xhr-request' ], function( xhrRequ
                 config.routes.audio = options.routes.audio;
             }
         }
-        
+
         if ( options.randomParam ) {
             config.randomParam = options.randomParam;
         }
@@ -774,6 +780,14 @@ define('visualcaptcha/config',[ 'visualcaptcha/xhr-request' ], function( xhrRequ
             if ( options.callbacks.loaded ) {
                 config.callbacks.loaded = options.callbacks.loaded;
             }
+        }
+
+        if ( options._loading ) {
+          config._loading = options._loading;
+        }
+
+        if ( options._loaded ) {
+          config._loaded = options._loaded;
         }
 
         return config;
@@ -943,12 +957,12 @@ define( 'visualcaptcha/templates',[],function() {
 
          btnAccessibility =
             '<div class="visualCaptcha-accessibility-button">' +
-                '<img src="{path}accessibility{retinaExtra}.png" title="{accessibilityTitle}" alt="{accessibilityAlt}" />' +
+                '<a href="#"><img src="{path}accessibility{retinaExtra}.png" title="{accessibilityTitle}" alt="{accessibilityAlt}" /></a>' +
             '</div>';
 
         btnRefresh =
             '<div class="visualCaptcha-refresh-button">' +
-                '<img src="{path}refresh{retinaExtra}.png" title="{refreshTitle}" alt="{refreshAlt}" />' +
+                '<a href="#"><img src="{path}refresh{retinaExtra}.png" title="{refreshTitle}" alt="{refreshAlt}" /></a>' +
             '</div>';
 
         string =
@@ -1005,7 +1019,7 @@ define( 'visualcaptcha/templates',[],function() {
         for ( var i = 0, l = captcha.numberOfImages(); i < l; i++ ) {
             string =
                 '<div class="img">' +
-                    '<img src="{imageUrl}" id="visualCaptcha-img-{i}" data-index="{i}" alt="" title="" />' +
+                    '<a href="#"><img src="{imageUrl}" id="visualCaptcha-img-{i}" data-index="{i}" alt="" title="" /></a>' +
                 '</div>';
 
             params = {
@@ -1284,10 +1298,8 @@ define( 'visualcaptcha.vanilla',[
 
         // Store captcha config
         captchaConfig = deepExtend( config.captcha, {
-            callbacks: {
-                loading: _loading.bind( null, element ),
-                loaded: _loaded.bind( null, element )
-            }
+            _loading: _loading.bind( null, element ),
+            _loaded: _loaded.bind( null, element )
         } );
 
         // Load namespace from data-namespace attribute
