@@ -1,6 +1,6 @@
-/*! visualCaptcha - v0.0.7 - 2015-07-13
+/*! visualCaptcha - v0.0.8 - 2016-01-23
 * http://visualcaptcha.net
-* Copyright (c) 2015 emotionLoop; Licensed MIT */
+* Copyright (c) 2016 emotionLoop; Licensed MIT */
 
 (function( root, factory ) {
     if ( typeof define === 'function' && define.amd ) {
@@ -1335,7 +1335,8 @@ define( 'visualcaptcha.angular',[
             var _request = function( url, callback ) {
                 $http({
                     method: 'GET',
-                    url: url
+                    url: url,
+                    withCredentials: true
                 }).success( callback );
             };
             return {
